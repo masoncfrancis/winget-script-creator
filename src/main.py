@@ -58,7 +58,9 @@ def interactive_input(output_filename):
         generate_powershell_script(program_list, output_filename)
         print(f"PowerShell script '{output_filename}' and winget list have been generated in the current directory.")
 
-def generate_powershell_script(program_list, output_filename):
+def generate_powershell_script(program_list, output_filename=None):
+    if not output_filename:
+        output_filename = "install_apps.ps1"
     with open(output_filename, "w") as script_file:
         script_file.write("$programs = @(\n")
         for program in program_list:
