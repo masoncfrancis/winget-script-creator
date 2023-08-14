@@ -50,15 +50,15 @@ def interactive_input():
         if not program_name:
             break
         program_list.append(program_name)
-        with open("./out/winget_list.txt", "a") as file:
+        with open("winget_list.txt", "a") as file:
             file.write(program_name + "\n")
 
     if program_list:
         generate_powershell_script(program_list)
-        print("PowerShell script and winget list have been generated in the 'out' directory.")
+        print("PowerShell script and winget list have been generated in the current directory.")
 
 def generate_powershell_script(program_list):
-    script_path = "./out/install_apps.ps1"
+    script_path = "install_apps.ps1"
 
     with open(script_path, "w") as script_file:
         script_file.write("$programs = @(\n")
@@ -70,5 +70,4 @@ def generate_powershell_script(program_list):
         script_file.write("}\n")
 
 if __name__ == "__main__":
-    os.makedirs("./out", exist_ok=True)
     main()
