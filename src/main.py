@@ -1,12 +1,12 @@
-# This program was written by ChatGPT
+# This program was written by ChatGPT and Mason Francis
 
 import os
 import argparse
 
 def main():
     parser = argparse.ArgumentParser(description="Generate PowerShell script and use winget based on input.")
-    parser.add_argument("-a", "--add", metavar="filename", help="Add program names from a text file and generate a new script")
-    parser.add_argument("-s", "--script", metavar="filename", help="Generate a script based on a text file")
+    parser.add_argument("-a", "--add", metavar="filename", help="Add program names to an existing text file and generate a new script")
+    parser.add_argument("-s", "--script", metavar="filename", help="Generate a script based on an text file")
     parser.add_argument("-n", "--new", action="store_true", help="Interactive mode to manually enter program names")
     parser.add_argument("-o", "--output", metavar="filename", default="install_apps.ps1", help="Specify the output filename for the PowerShell script")
 
