@@ -1,6 +1,5 @@
 # This program was written by ChatGPT
 
-
 def main():
     program_list = []
 
@@ -28,3 +27,4 @@ def generate_powershell_script(program_list):
 
 if __name__ == "__main__":
     main()
+
