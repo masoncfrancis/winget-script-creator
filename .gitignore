@@ -1,1 +1,4 @@
-out/
+*.ps1
+*.txt
+.vscode/
+.idea/
