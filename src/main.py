@@ -7,6 +7,7 @@ def main():
     parser = argparse.ArgumentParser(description="Generate PowerShell script and use winget based on input.")
     parser.add_argument("-a", "--add", metavar="filename", help="Add program names from a text file and generate a new script")
     parser.add_argument("-s", "--script", metavar="filename", help="Generate a script based on a text file")
+    parser.add_argument("-i", "--interactive", action="store_true", help="Interactive mode to manually enter program names")
 
     args = parser.parse_args()
 
@@ -14,8 +15,10 @@ def main():
         add_programs_from_file(args.add)
     elif args.script:
         generate_powershell_script_from_file(args.script)
-    else:
+    elif args.interactive:
         interactive_input()
+    else:
+        parser.print_usage()
 
 def add_programs_from_file(filename):
     program_list = []
