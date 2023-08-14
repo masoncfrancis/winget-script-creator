@@ -1,5 +1,7 @@
 # This program was written by ChatGPT
 
+import os
+
 def main():
     program_list = []
 
@@ -8,15 +10,18 @@ def main():
         if not program_name:
             break
         program_list.append(program_name)
-        with open("winget_list.txt", "a") as file:
+        with open("./out/winget_list.txt", "a") as file:
             file.write(program_name + "\n")
 
     if program_list:
         generate_powershell_script(program_list)
-        print("PowerShell script has been generated.")
+        print("PowerShell script and winget list have been generated in the 'out' directory.")
 
 def generate_powershell_script(program_list):
-    with open("install_apps.ps1", "w") as script_file:
+    script_path = "./out/install_apps.ps1"
+    winget_list_path = "./out/winget_list.txt"
+    
+    with open(script_path, "w") as script_file:
         script_file.write("$programs = @(\n")
         for program in program_list:
             script_file.write(f'    "{program}",\n')
@@ -26,5 +31,5 @@ def generate_powershell_script(program_list):
         script_file.write("}\n")
 
 if __name__ == "__main__":
+    os.makedirs("./out", exist_ok=True)
     main()
-
