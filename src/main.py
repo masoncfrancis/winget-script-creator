@@ -28,11 +28,15 @@ def add_programs_from_file(filename):
             program_name = line.strip()
             if program_name:
                 program_list.append(program_name)
+    
     if program_list:
         generate_powershell_script(program_list)
         print("PowerShell script has been generated based on the added programs.")
+        
+        if input("Do you want to add more programs interactively? (y/n): ").lower() == "y":
+            interactive_input()
 
-def generate_powershell_script_from_file(filename, output_filename):
+def generate_powershell_script_from_file(filename, output_filename=None):
     program_list = []
     with open(filename, "r") as file:
         for line in file:
@@ -40,10 +44,10 @@ def generate_powershell_script_from_file(filename, output_filename):
             if program_name:
                 program_list.append(program_name)
     if program_list:
-        generate_powershell_script(program_list, output_filename)
-        print(f"PowerShell script '{output_filename}' has been generated based on the provided program list.")
+        output_name_final = generate_powershell_script(program_list, output_filename)
+        print(f"PowerShell script '{output_name_final}' has been generated based on the provided program list.")
 
-def interactive_input(output_filename):
+def interactive_input(output_filename=None):
     program_list = []
 
     while True:
@@ -55,8 +59,8 @@ def interactive_input(output_filename):
             file.write(program_name + "\n")
 
     if program_list:
-        generate_powershell_script(program_list, output_filename)
-        print(f"PowerShell script '{output_filename}' and winget list have been generated in the current directory.")
+        output_name_final = generate_powershell_script(program_list, output_filename)
+        print(f"PowerShell script '{output_name_final}' and winget list have been generated in the current directory.")
 
 def generate_powershell_script(program_list, output_filename=None):
     if not output_filename:
@@ -69,6 +73,7 @@ def generate_powershell_script(program_list, output_filename=None):
         script_file.write("foreach ($app in $programs) {\n")
         script_file.write("    Start-Process -Wait -FilePath 'winget' -ArgumentList 'install', $app\n")
         script_file.write("}\n")
+    return output_filename
 
 if __name__ == "__main__":
     main()
