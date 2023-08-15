@@ -6,16 +6,16 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description="Generate PowerShell script and use winget based on input.")
     parser.add_argument("-a", "--add", metavar="filename", help="Add program names to an existing text file and generate a new script")
-    parser.add_argument("-s", "--script", metavar="filename", help="Generate a script based on an text file")
+    parser.add_argument("-e", "--existing", metavar="filename", help="Generate a script based on an existing text file")
     parser.add_argument("-n", "--new", action="store_true", help="Interactive mode to manually enter program names")
-    parser.add_argument("-o", "--output", metavar="filename", default="install_apps.ps1", help="Specify the output filename for the PowerShell script")
+    parser.add_argument("-o", "--output", metavar="filename", help="Specify the output filename for the PowerShell script")
 
     args = parser.parse_args()
 
     if args.add:
         add_programs_from_file(args.add)
-    elif args.script:
-        generate_powershell_script_from_file(args.script, args.output)
+    elif args.existing:
+        generate_powershell_script_from_file(args.existing, args.output)
     elif args.new:
         interactive_input(args.output)
     else:
@@ -34,7 +34,7 @@ def add_programs_from_file(filename):
         print("PowerShell script has been generated based on the added programs.")
         
         if input("Do you want to add more programs interactively? (y/n): ").lower() == "y":
-            interactive_input()
+            interactive_input(existing_programs=program_list)
 
 def generate_powershell_script_from_file(filename, output_filename=None):
     program_list = []
@@ -44,11 +44,11 @@ def generate_powershell_script_from_file(filename, output_filename=None):
             if program_name:
                 program_list.append(program_name)
     if program_list:
-        output_name_final = generate_powershell_script(program_list, output_filename)
-        print(f"PowerShell script '{output_name_final}' has been generated based on the provided program list.")
+        generate_powershell_script(program_list, output_filename)
+        print(f"PowerShell script '{output_filename}' has been generated based on the provided program list.")
 
-def interactive_input(output_filename=None):
-    program_list = []
+def interactive_input(output_filename=None, existing_programs=None):
+    program_list = existing_programs if existing_programs else []
 
     while True:
         program_name = input("Enter the name of a program (or press Enter to finish): ")
@@ -59,8 +59,8 @@ def interactive_input(output_filename=None):
             file.write(program_name + "\n")
 
     if program_list:
-        output_name_final = generate_powershell_script(program_list, output_filename)
-        print(f"PowerShell script '{output_name_final}' and winget list have been generated in the current directory.")
+        generate_powershell_script(program_list, output_filename)
+        print(f"PowerShell script '{output_filename}' and winget list have been generated in the current directory.")
 
 def generate_powershell_script(program_list, output_filename=None):
     if not output_filename:
@@ -73,7 +73,6 @@ def generate_powershell_script(program_list, output_filename=None):
         script_file.write("foreach ($app in $programs) {\n")
         script_file.write("    Start-Process -Wait -FilePath 'winget' -ArgumentList 'install', $app\n")
         script_file.write("}\n")
-    return output_filename
 
 if __name__ == "__main__":
     main()
