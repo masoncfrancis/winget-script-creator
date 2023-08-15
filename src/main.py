@@ -19,6 +19,8 @@ def main():
         generate_script_from_file(args.existing, args.output, args.batch)
     elif args.new:
         interactive_input(args.output, args.batch)
+    elif args.batch:  # Check if the batch flag is set
+        interactive_input(args.output, is_batch=True)
     else:
         parser.print_usage()
 
